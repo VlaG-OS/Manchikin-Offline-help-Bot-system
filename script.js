@@ -550,6 +550,9 @@ document.addEventListener('DOMContentLoaded', function() {
 // Мобильные настройки
 function openMobileSettings() {
     document.getElementById('mobileSettings').classList.add('open');
+    // Синхронизируем значения
+    document.getElementById('playerCountMobile').value = document.getElementById('playerCount').value;
+    document.getElementById('botCountMobile').value = document.getElementById('botCount').value;
 }
 
 function closeMobileSettings() {
@@ -560,4 +563,9 @@ function syncPlayerCount() {
     const mobileCount = document.getElementById('playerCountMobile').value;
     document.getElementById('playerCount').value = mobileCount;
     document.getElementById('playerCount').dispatchEvent(new Event('input'));
+}
+
+function syncBotCount() {
+    const mobileCount = document.getElementById('botCountMobile').value;
+    document.getElementById('botCount').value = mobileCount;
 }

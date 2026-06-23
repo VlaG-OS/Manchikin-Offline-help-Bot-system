@@ -64,15 +64,17 @@ body::before {
     
     .main-layout {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 0;
     }
     
-    /* Левая панель - всегда видна с игроками */
+    /* Левая панель становится верхней на мобильных */
     .players-panel {
         position: relative;
         top: 0;
         padding: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
     
     .players-panel h2 {
@@ -80,56 +82,64 @@ body::before {
         margin-bottom: 6px;
     }
     
-    /* Скрываем ввод количества игроков и кнопку нового матча - они будут внизу */
+    /* Скрываем всё кроме списка игроков */
     .players-panel > .input-group,
-    .players-panel > .reset-btn {
+    .players-panel > .reset-btn,
+    .players-panel > .next-turn-btn {
         display: none;
     }
     
-    /* Кнопка "Следующий ход" остаётся видимой и выделена */
-    .next-turn-btn {
-        padding: 8px;
-        font-size: 0.95em;
-        margin-bottom: 6px;
-    }
-    
-    /* Все игроки видны, компактно */
+    /* Все игроки видны, компактно, БЕЗ кнопки "Ходит?" */
     .player-item {
         padding: 6px;
         margin-bottom: 5px;
     }
     
-    /* Настройка боя - только количество ботов и кнопка броска */
+    /* Скрываем кнопки "Ходит?" на мобильных */
+    .player-item .turn-marker-btn {
+        display: none !important;
+    }
+    
+    /* Убираем gap между level-control элементами */
+    .player-controls {
+        gap: 0;
+    }
+    
+    /* Настройка боя - скрываем заголовок и поля ввода, оставляем только кнопки */
     .setup-section {
         padding: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 0;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: none;
     }
     
     .setup-section h2 {
-        font-size: 0.95em;
-        margin-bottom: 6px;
+        display: none;
     }
     
     .setup-section .input-group {
-        padding: 6px;
-        margin-bottom: 6px;
+        display: none;
     }
     
-    .setup-section .input-group label {
-        font-size: 0.8em;
+    /* Кнопка "Следующий ход" - большая и заметная */
+    .game-area > .next-turn-btn {
+        display: block !important;
+        width: 100%;
+        padding: 12px;
+        font-size: 1.05em;
+        margin: 0 0 8px 0;
+        border-radius: 8px;
     }
     
-    .setup-section .input-group input {
-        padding: 6px;
-        font-size: 0.9em;
-    }
-    
+    /* Кнопка "Бросить кости" */
     .main-btn {
-        padding: 10px;
-        font-size: 1em;
+        padding: 12px;
+        font-size: 1.05em;
+        margin-bottom: 8px;
     }
     
-    /* Карточки ботов - 1 колонка на мобильных */
+    /* Карточки ботов - 1 колонка */
     .results-section {
         grid-template-columns: 1fr;
         gap: 6px;
@@ -164,7 +174,7 @@ body::before {
     /* Итоги компактнее */
     .summary-section {
         padding: 8px;
-        margin-top: 8px;
+        margin-top: 0;
         margin-bottom: 8px;
     }
     
@@ -199,11 +209,6 @@ body::before {
         cursor: pointer;
         margin-top: 10px;
         font-family: 'Roboto', sans-serif;
-    }
-    
-    .turn-marker-btn {
-        padding: 5px;
-        font-size: 0.8em;
     }
     
     .level-btn {

@@ -26,6 +26,9 @@
             
             <!-- Правая часть: настройки и результаты -->
             <div class="game-area">
+                <!-- Кнопка "Следующий ход" для мобильных (на десктопе скрыта) -->
+                <button class="next-turn-btn" style="display: none;" onclick="nextTurn()">➡️ Следующий ход</button>
+                
                 <div class="setup-section">
                     <h2>⚙️ Настройка боя</h2>
                     <div class="input-group">
@@ -47,8 +50,8 @@
                     <button id="tacticsBtn" class="tactics-btn" onclick="toggleTactics()">📖 Как играют боты?</button>
                 </div>
                 
-                <!-- Кнопка дополнительных настроек для мобильных -->
-                <button class="mobile-settings-trigger" onclick="openMobileSettings()">⚙️ Дополнительные настройки</button>
+                <!-- Кнопка настроек игры для мобильных -->
+                <button class="mobile-settings-trigger" onclick="openMobileSettings()">⚙️ Настройки игры</button>
             </div>
         </div>
     </div>
@@ -56,13 +59,18 @@
     <!-- Мобильная панель настроек (полноэкранная) -->
     <div class="mobile-settings-panel" id="mobileSettings">
         <div class="mobile-settings-header">
-            <h2>⚙️ Дополнительные настройки</h2>
+            <h2>⚙️ Настройки игры</h2>
             <button class="mobile-close-btn" onclick="closeMobileSettings()">✕</button>
         </div>
         
         <div class="input-group">
             <label>Количество игроков:</label>
             <input type="number" id="playerCountMobile" min="1" max="6" value="2" onchange="syncPlayerCount()">
+        </div>
+        
+        <div class="input-group">
+            <label>Количество ботов:</label>
+            <input type="number" id="botCountMobile" min="1" max="6" value="1" onchange="syncBotCount()">
         </div>
         
         <button class="reset-btn" onclick="resetMatch(); closeMobileSettings();">🔄 Новый матч</button>
