@@ -14,6 +14,12 @@
             <!-- Левая панель: уровни игроков -->
             <div class="players-panel">
                 <h2>👥 Игроки</h2>
+                
+                <!-- Кнопка для открытия настроек на мобильных -->
+                <button class="mobile-settings-trigger" onclick="openMobileSettings()" style="display: none;">
+                    ⚙️ Настройки игры
+                </button>
+                
                 <div class="input-group">
                     <label>Количество игроков:</label>
                     <input type="number" id="playerCount" min="1" max="6" value="2">
@@ -47,6 +53,26 @@
                 </div>
             </div>
         </div>
+    </div>
+    
+    <!-- Мобильная панель настроек (полноэкранная) -->
+    <div class="mobile-settings-panel" id="mobileSettings">
+        <div class="mobile-settings-header">
+            <h2>⚙️ Настройки</h2>
+            <button class="mobile-close-btn" onclick="closeMobileSettings()">✕ Закрыть</button>
+        </div>
+        
+        <div class="input-group">
+            <label>Количество игроков:</label>
+            <input type="number" id="playerCountMobile" min="1" max="6" value="2" onchange="syncPlayerCount()">
+        </div>
+        
+        <button class="next-turn-btn" onclick="nextTurn(); closeMobileSettings();">➡️ Следующий ход</button>
+        
+        <h3 style="margin-top: 15px; margin-bottom: 10px; color: #8b4513;">Все игроки:</h3>
+        <div id="playerLevelsMobile" class="player-levels"></div>
+        
+        <button class="reset-btn" onclick="resetMatch(); closeMobileSettings();">🔄 Новый матч</button>
     </div>
 
     <!-- Модальное окно с тактикой -->

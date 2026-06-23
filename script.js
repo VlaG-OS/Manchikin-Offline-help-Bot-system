@@ -635,3 +635,62 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('playerCount').dispatchEvent(new Event('input'));
 });
+
+// Мобильные настройки
+function openMobileSettings() {
+    document.getElementById('mobileSettings').classList.add('open');
+    updateMobilePlayerDisplay();
+}
+
+function closeMobileSettings() {
+    document.getElementById('mobileSettings').classList.remove('open');
+}
+
+function syncPlayerCount() {
+    const mobileCount = document.getElementById('playerCountMobile').value;
+    document.getElementById('playerCount').value = mobileCount;
+    document.getElementById('playerCount').dispatchEvent(new Event('input'));
+}
+
+function updateMobilePlayerDisplay() {
+    const playerCount = parseInt(document.getElementById('playerCount').value);
+    const currentPlayerId = parseInt(document.getElementById('currentPlayer').value);
+    const leaderId = determineLeader();
+    
+    const container = document.getElementById('playerLevelsMobile');
+    container.innerHTML = '';
+    
+    for (let i = 1; i <= playerCount; i++) {
+        const level = playerLevels[i] || 1;
+        const isLeader = i === leaderId;
+        const isCurrentTurn = i === currentPlayerId;
+        
+        let classNames = 'player-item';
+        if (isLeader) classNames += ' leader';
+        if (isCurrentTurn) classNames += ' current-turn';
+        
+        const playerDiv = document.createElement('div');
+        playerDiv.className = classNames;
+        playerDiv.innerHTML = `
+            <div class="player-header">
+                <span class="player-name">Игрок ${i}</span>
+                <span class="player-badges">
+                    ${isLeader ? '👑' : ''}
+                </span>
+            </div>
+            <div class="player-controls">
+                <div class="level-control">
+                    <button class="level-btn" onclick="changeLevel(${i}, -1); updateMobilePlayerDisplay();">−</button>
+                    <div class="level-display">Ур. ${level}</div>
+                    <button class="level-btn" onclick="changeLevel(${i}, 1); updateMobilePlayerDisplay();">+</button>
+                </div>
+                <button class="turn-marker-btn ${isCurrentTurn ? 'active' : ''}" 
+                        onclick="setCurrentPlayer(${i}); updateMobilePlayerDisplay();"
+                        title="Установить как текущего игрока">
+                    ${isCurrentTurn ? '🎯 Ходит' : 'Ходит?'}
+                </button>
+            </div>
+        `;
+        container.appendChild(playerDiv);
+    }
+}
