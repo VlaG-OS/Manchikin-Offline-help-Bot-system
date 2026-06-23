@@ -64,7 +64,7 @@ body::before {
     
     .main-layout {
         grid-template-columns: 1fr;
-        gap: 0;
+        gap: 8px;
     }
     
     /* Левая панель становится верхней на мобильных */
@@ -82,11 +82,19 @@ body::before {
         margin-bottom: 6px;
     }
     
-    /* Скрываем всё кроме списка игроков */
+    /* Скрываем ввод количества и кнопку нового матча, НО кнопку "Следующий ход" оставляем! */
     .players-panel > .input-group,
-    .players-panel > .reset-btn,
-    .players-panel > .next-turn-btn {
+    .players-panel > .reset-btn {
         display: none;
+    }
+    
+    /* Кнопка "Следующий ход" ПОСЛЕ игроков - делаем видимой */
+    .players-panel .next-turn-btn {
+        display: block !important;
+        padding: 10px;
+        font-size: 1em;
+        margin-top: 6px;
+        margin-bottom: 0;
     }
     
     /* Все игроки видны, компактно, БЕЗ кнопки "Ходит?" */
@@ -105,38 +113,25 @@ body::before {
         gap: 0;
     }
     
-    /* Настройка боя - скрываем заголовок и поля ввода, оставляем только кнопки */
+    /* Настройка боя - скрываем заголовок и поля ввода, оставляем только кнопку броска */
     .setup-section {
         padding: 8px;
-        margin-bottom: 0;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        border-top: none;
+        margin-bottom: 8px;
     }
     
     .setup-section h2 {
-        display: none;
+        font-size: 0.95em;
+        margin-bottom: 6px;
     }
     
     .setup-section .input-group {
         display: none;
     }
     
-    /* Кнопка "Следующий ход" - большая и заметная */
-    .game-area > .next-turn-btn {
-        display: block !important;
-        width: 100%;
-        padding: 12px;
-        font-size: 1.05em;
-        margin: 0 0 8px 0;
-        border-radius: 8px;
-    }
-    
     /* Кнопка "Бросить кости" */
     .main-btn {
-        padding: 12px;
-        font-size: 1.05em;
-        margin-bottom: 8px;
+        padding: 10px;
+        font-size: 1em;
     }
     
     /* Карточки ботов - 1 колонка */
