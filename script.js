@@ -437,96 +437,7 @@ document.getElementById('playerCount').addEventListener('input', function() {
     updatePlayerDisplay();
 });
 
-// Главная функция
-document.getElementById('rollBtn').addEventListener('click', function() {
-    const botCount = parseInt(document.getElementById('botCount').value);
-    const playerCount = parseInt(document.getElementById('playerCount').value);
-    const currentPlayerId = parseInt(document.getElementById('currentPlayer').value);
-    const leaderId = parseInt(document.getElementById('leader').value);
-    
-    if (botCount < 1 || botCount > 6) {
-        alert('Количество ботов должно быть от 1 до 6');
-        return;
-    }
-    
-    if (playerCount < 1 || playerCount > 6) {
-        alert('Количество игроков должно быть от 1 до 6');
-        return;
-    }
-    
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
-    
-    let totalPlayerBonus = 0;
-    let totalMonsterBonus = 0;
-    
-    // Обработка каждого бота
-    for (let i = 1; i <= botCount; i++) {
-        const behaviorRoll = rollD6();
-        const modifiedRoll = applyLeaderBias(behaviorRoll, currentPlayerId, leaderId);
-        const strengthRoll = rollD6();
-        
-        const behavior = getBehaviorType(modifiedRoll);
-        const strength = getStrengthLevel(strengthRoll);
-        const effect = calculateEffect(behavior, strength);
-        
-        totalPlayerBonus += effect.playerBonus;
-        totalMonsterBonus += effect.monsterBonus;
-        
-        // Создание карточки бота
-        const botCard = document.createElement('div');
-        botCard.className = 'bot-card';
-        botCard.innerHTML = `
-            <div class="bot-header">
-                <div class="bot-name">🤖 Бот ${i}</div>
-                <div class="dice-rolls">
-                    <div class="dice" title="Поведение">🎲 ${behaviorRoll}</div>
-                    <div class="dice" title="Сила">🎲 ${strengthRoll}</div>
-                </div>
-            </div>
-            <div class="bot-details">
-                <div class="detail-row">
-                    <span class="detail-label">Поведение:</span>
-                    <span class="detail-value ${behavior.class}">${behavior.label}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Сила:</span>
-                    <span class="detail-value">${strength.label}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Эффект:</span>
-                    <span class="detail-value">${effect.description}</span>
-                </div>
-            </div>
-        `;
-        resultsDiv.appendChild(botCard);
-    }
-    
-    // Показать итоги
-    const summaryDiv = document.getElementById('summary');
-    const summaryContent = document.getElementById('summaryContent');
-    summaryDiv.style.display = 'block';
-    
-    const currentPlayerName = `Игрок ${currentPlayerId}`;
-    const leaderName = leaderId === 0 ? 'Никто' : `Игрок ${leaderId}`;
-    
-    summaryContent.innerHTML = `
-        <div class="summary-item summary-info">
-            👥 В игре: ${playerCount} игрок(ов)
-        </div>
-        <div class="summary-item summary-leader">
-            👑 Лидер: ${leaderName} | 🎯 Ходит: ${currentPlayerName}
-        </div>
-        <div class="summary-item summary-player">
-            🧙 Бонус игрокам: +${totalPlayerBonus}
-        </div>
-        <div class="summary-item summary-monster">
-            👹 Бонус монстру: +${totalMonsterBonus}
-        </div>
-    `;
-});
-
-// Главная функция
+// Главная функция - Бросок кубиков
 document.getElementById('rollBtn').addEventListener('click', function() {
     const botCount = parseInt(document.getElementById('botCount').value);
     const playerCount = parseInt(document.getElementById('playerCount').value);
@@ -639,7 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Мобильные настройки
 function openMobileSettings() {
     document.getElementById('mobileSettings').classList.add('open');
-    updateMobilePlayerDisplay();
 }
 
 function closeMobileSettings() {
@@ -650,47 +560,4 @@ function syncPlayerCount() {
     const mobileCount = document.getElementById('playerCountMobile').value;
     document.getElementById('playerCount').value = mobileCount;
     document.getElementById('playerCount').dispatchEvent(new Event('input'));
-}
-
-function updateMobilePlayerDisplay() {
-    const playerCount = parseInt(document.getElementById('playerCount').value);
-    const currentPlayerId = parseInt(document.getElementById('currentPlayer').value);
-    const leaderId = determineLeader();
-    
-    const container = document.getElementById('playerLevelsMobile');
-    container.innerHTML = '';
-    
-    for (let i = 1; i <= playerCount; i++) {
-        const level = playerLevels[i] || 1;
-        const isLeader = i === leaderId;
-        const isCurrentTurn = i === currentPlayerId;
-        
-        let classNames = 'player-item';
-        if (isLeader) classNames += ' leader';
-        if (isCurrentTurn) classNames += ' current-turn';
-        
-        const playerDiv = document.createElement('div');
-        playerDiv.className = classNames;
-        playerDiv.innerHTML = `
-            <div class="player-header">
-                <span class="player-name">Игрок ${i}</span>
-                <span class="player-badges">
-                    ${isLeader ? '👑' : ''}
-                </span>
-            </div>
-            <div class="player-controls">
-                <div class="level-control">
-                    <button class="level-btn" onclick="changeLevel(${i}, -1); updateMobilePlayerDisplay();">−</button>
-                    <div class="level-display">Ур. ${level}</div>
-                    <button class="level-btn" onclick="changeLevel(${i}, 1); updateMobilePlayerDisplay();">+</button>
-                </div>
-                <button class="turn-marker-btn ${isCurrentTurn ? 'active' : ''}" 
-                        onclick="setCurrentPlayer(${i}); updateMobilePlayerDisplay();"
-                        title="Установить как текущего игрока">
-                    ${isCurrentTurn ? '🎯 Ходит' : 'Ходит?'}
-                </button>
-            </div>
-        `;
-        container.appendChild(playerDiv);
-    }
 }

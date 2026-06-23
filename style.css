@@ -54,7 +54,7 @@ body::before {
 
 @media (max-width: 768px) {
     body {
-        padding: 10px;
+        padding: 8px;
     }
     
     h1 {
@@ -64,74 +64,128 @@ body::before {
     
     .main-layout {
         grid-template-columns: 1fr;
-        gap: 0;
+        gap: 8px;
     }
     
-    /* Скрываем панель игроков на мобильных - показываем только активного */
+    /* Левая панель - всегда видна с игроками */
     .players-panel {
         position: relative;
         top: 0;
-        margin-bottom: 10px;
-        padding: 10px;
+        padding: 8px;
+        margin-bottom: 8px;
     }
     
     .players-panel h2 {
-        font-size: 1em;
-        margin-bottom: 8px;
+        font-size: 0.95em;
+        margin-bottom: 6px;
     }
     
-    /* Скрываем лишние элементы на мобильных */
-    .players-panel .input-group,
-    .players-panel .reset-btn,
-    .players-panel .next-turn-btn {
+    /* Скрываем ввод количества игроков и кнопку нового матча - они будут внизу */
+    .players-panel > .input-group,
+    .players-panel > .reset-btn {
         display: none;
     }
     
-    /* Показываем только активного игрока на мобильных */
-    .player-item:not(.current-turn) {
-        display: none;
+    /* Кнопка "Следующий ход" остаётся видимой и выделена */
+    .next-turn-btn {
+        padding: 8px;
+        font-size: 0.95em;
+        margin-bottom: 6px;
     }
     
-    .player-item.current-turn {
-        margin-bottom: 0;
+    /* Все игроки видны, компактно */
+    .player-item {
+        padding: 6px;
+        margin-bottom: 5px;
     }
     
-    /* Компактная настройка боя */
+    /* Настройка боя - только количество ботов и кнопка броска */
     .setup-section {
-        padding: 10px;
-        margin-bottom: 10px;
+        padding: 8px;
+        margin-bottom: 8px;
     }
     
     .setup-section h2 {
+        font-size: 0.95em;
+        margin-bottom: 6px;
+    }
+    
+    .setup-section .input-group {
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .setup-section .input-group label {
+        font-size: 0.8em;
+    }
+    
+    .setup-section .input-group input {
+        padding: 6px;
+        font-size: 0.9em;
+    }
+    
+    .main-btn {
+        padding: 10px;
         font-size: 1em;
+    }
+    
+    /* Карточки ботов - 1 колонка на мобильных */
+    .results-section {
+        grid-template-columns: 1fr;
+        gap: 6px;
         margin-bottom: 8px;
     }
     
-    /* Карточки ботов занимают весь экран */
-    .results-section {
-        grid-template-columns: 1fr;
-        gap: 8px;
-        margin-bottom: 10px;
+    .bot-card {
+        padding: 6px;
+    }
+    
+    .bot-name {
+        font-size: 0.85em;
+    }
+    
+    .dice {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+    
+    .detail-row {
+        padding: 4px;
+        font-size: 0.75em;
+    }
+    
+    .energy-bar {
+        font-size: 0.75em;
+        padding: 4px 6px;
+        margin-bottom: 6px;
     }
     
     /* Итоги компактнее */
     .summary-section {
-        padding: 10px;
-        margin-top: 10px;
-    }
-    
-    .summary-section h3 {
-        font-size: 1em;
+        padding: 8px;
+        margin-top: 8px;
         margin-bottom: 8px;
     }
     
-    .summary-item {
-        padding: 6px;
-        margin-bottom: 5px;
-        font-size: 0.8em;
+    .summary-section h3 {
+        font-size: 0.95em;
+        margin-bottom: 6px;
     }
     
-    /* Добавляем кнопку для открытия настроек */
+    .summary-item {
+        padding: 5px;
+        margin-bottom: 4px;
+        font-size: 0.75em;
+    }
+    
+    /* Кнопка тактики компактнее */
+    .tactics-btn {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+    
+    /* Кнопка открытия дополнительных настроек внизу */
     .mobile-settings-trigger {
         display: block !important;
         width: 100%;
@@ -140,66 +194,34 @@ body::before {
         color: #fff;
         border: 2px solid #5c4a3a;
         border-radius: 8px;
-        font-size: 1em;
+        font-size: 0.95em;
         font-weight: bold;
         cursor: pointer;
-        margin-bottom: 10px;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    /* Полноэкранная панель настроек на мобильных */
-    .mobile-settings-panel {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
-        z-index: 1500;
-        overflow-y: auto;
-        padding: 15px;
-    }
-    
-    .mobile-settings-panel.open {
-        display: block;
-    }
-    
-    .mobile-settings-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-    }
-    
-    .mobile-settings-header h2 {
-        margin: 0;
-        font-size: 1.3em;
-    }
-    
-    .mobile-close-btn {
-        background: linear-gradient(to bottom, #dc143c 0%, #8b0000 100%);
-        color: white;
-        border: 2px solid #8b0000;
-        padding: 8px 15px;
-        border-radius: 6px;
-        font-weight: bold;
-        cursor: pointer;
+        margin-top: 10px;
         font-family: 'Roboto', sans-serif;
     }
     
     .turn-marker-btn {
-        padding: 6px;
-        font-size: 0.85em;
+        padding: 5px;
+        font-size: 0.8em;
     }
     
     .level-btn {
-        width: 28px;
-        height: 28px;
-        font-size: 1em;
+        width: 26px;
+        height: 26px;
+        font-size: 0.95em;
     }
     
     .level-display {
+        font-size: 0.9em;
+        padding: 4px;
+    }
+    
+    .player-name {
+        font-size: 0.9em;
+    }
+    
+    .player-badges {
         font-size: 1em;
     }
 }
@@ -470,7 +492,7 @@ h2 {
     font-weight: bold;
     color: #ffd700;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    font-family: 'Creepster', cursive;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -480,7 +502,7 @@ h2 {
     }
     
     .bot-name {
-        font-size: 0.9em;
+        font-size: 0.95em;
     }
 }
 
@@ -548,12 +570,14 @@ h2 {
 .detail-label {
     color: #f4e4c1;
     font-weight: 600;
+    font-family: 'Roboto', sans-serif;
 }
 
 .detail-value {
     font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     color: #fff;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -1246,6 +1270,7 @@ h2 {
     font-weight: bold;
     text-align: center;
     border: 1px solid #d4af37;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Активированная карточка бота */
@@ -1288,4 +1313,52 @@ h2 {
 /* Скрываем триггер настроек на десктопе */
 .mobile-settings-trigger {
     display: none;
+}
+
+/* Мобильная панель настроек */
+.mobile-settings-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
+    z-index: 3000;
+    overflow-y: auto;
+    padding: 15px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mobile-settings-panel.open {
+    display: flex !important;
+}
+
+.mobile-settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #8b6914;
+    margin-bottom: 10px;
+}
+
+.mobile-settings-header h2 {
+    color: #8b4513;
+    font-size: 1.3em;
+    margin: 0;
+    font-family: 'Creepster', cursive;
+}
+
+.mobile-close-btn {
+    padding: 8px 15px;
+    background: linear-gradient(to bottom, #dc143c 0%, #8b0000 100%);
+    color: white;
+    border: 2px solid #8b0000;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 }
