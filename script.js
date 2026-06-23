@@ -487,6 +487,13 @@ document.getElementById('rollBtn').addEventListener('click', function() {
             `<div class="energy-bar">⚡ Активация! Ур.${effect.energyLevel} → Энергия: ${effect.newEnergy}/12</div>` :
             `<div class="energy-bar">🔋 Накопление: ${effect.newEnergy}/12</div>`;
         
+        // Если бот копит энергию - показываем как нейтральный
+        const displayBehavior = effect.activated ? behavior : { 
+            type: 'neutral', 
+            label: '🟡 Накапливает энергию', 
+            class: 'behavior-neutral' 
+        };
+        
         botCard.innerHTML = `
             <div class="bot-header">
                 <div class="bot-name">🤖 Бот ${i + 1}</div>
@@ -499,7 +506,7 @@ document.getElementById('rollBtn').addEventListener('click', function() {
             <div class="bot-details">
                 <div class="detail-row">
                     <span class="detail-label">Поведение:</span>
-                    <span class="detail-value ${behavior.class}">${behavior.label}</span>
+                    <span class="detail-value ${displayBehavior.class}">${displayBehavior.label}</span>
                 </div>
                 <div class="detail-row">
                     <span class="detail-label">Эффект:</span>
