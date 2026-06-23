@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Манчкин - Боты NPC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Манчкин: Боты NPC</h1>
+        
+        <div class="main-layout">
+            <!-- Левая панель: уровни игроков -->
+            <div class="players-panel">
+                <h2>👥 Игроки</h2>
+                <div class="input-group">
+                    <label>Количество игроков:</label>
+                    <input type="number" id="playerCount" min="1" max="6" value="2">
+                </div>
+                <button class="next-turn-btn" onclick="nextTurn()">➡️ Следующий ход</button>
+                <div id="playerLevels" class="player-levels"></div>
+                <button class="reset-btn" onclick="resetMatch()">🔄 Новый матч</button>
+            </div>
+            
+            <!-- Правая часть: настройки и результаты -->
+            <div class="game-area">
+                <div class="setup-section">
+                    <h2>⚙️ Настройка боя</h2>
+                    <div class="input-group">
+                        <label>Количество ботов:</label>
+                        <input type="number" id="botCount" min="1" max="6" value="1">
+                    </div>
+                    <select id="currentPlayer" style="display: none;">
+                        <option value="1">Игрок 1</option>
+                        <option value="2">Игрок 2</option>
+                    </select>
+                    <button id="rollBtn" class="main-btn">🎲 Бросить кости!</button>
+                </div>
+
+                <div id="results" class="results-section"></div>
+        
+                <div class="summary-section" id="summary" style="display: none;">
+                    <h3>📊 Итого</h3>
+                    <div id="summaryContent"></div>
+                    <button id="tacticsBtn" class="tactics-btn" onclick="toggleTactics()">📖 Как играют боты?</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно с тактикой -->
+    <div id="tacticsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="toggleTactics()">&times;</span>
+            <h2>🎯 Тактика ботов</h2>
+            
+            <div class="tactics-section">
+                <h3>📊 Основная механика</h3>
+                <p><strong>Стадия A - Тип поведения (бросок 1d6):</strong></p>
+                <ul>
+                    <li><span class="behavior-player">1-2 → Помогает игроку</span> (33%)</li>
+                    <li><span class="behavior-neutral">3-4 → Нейтральный</span> (33%)</li>
+                    <li><span class="behavior-monster">5-6 → Помогает монстру</span> (33%)</li>
+                </ul>
+                
+                <p><strong>Стадия B - Сила влияния (бросок 1d6):</strong></p>
+                <ul>
+                    <li>1-2 → Слабое влияние (+2 бонус)</li>
+                    <li>3-4 → Среднее влияние (+4 бонус)</li>
+                    <li>5-6 → Сильное влияние (+6 бонус)</li>
+                </ul>
+            </div>
+
+            <div class="tactics-section">
+                <h3>🎲 Нейтральное поведение (ОСЛАБЛЕННОЕ!)</h3>
+                <p><strong>Нейтральность теперь слабее, чтобы не доминировать:</strong></p>
+                <ul>
+                    <li><strong>Слабое:</strong> Всегда 0 (ничего не происходит)</li>
+                    <li><strong>Среднее:</strong> 33% = +1 игроку, 33% = +1 монстру, 33% = 0</li>
+                    <li><strong>Сильное:</strong> 50% = +1 игроку, 50% = +1 монстру</li>
+                </ul>
+                <p><em>Нейтрал больше не даёт +2! Максимум ±1.</em></p>
+            </div>
+
+            <div class="tactics-section">
+                <h3>👑 Система уровней игроков (СБАЛАНСИРОВАНА!)</h3>
+                <p><strong>Определение лидера:</strong></p>
+                <ul>
+                    <li>Лидер = игрок с самым высоким уровнем</li>
+                    <li>Если уровни равны → "Никто не лидирует"</li>
+                </ul>
+                
+                <p><strong>Если ходит лидер (МЯГКИЙ ШТРАФ):</strong></p>
+                <ul>
+                    <li>Штраф применяется ТОЛЬКО если лидер впереди на 2+ уровня</li>
+                    <li>25% шанс: "Помощь игроку" → "Нейтральный"</li>
+                    <li>Если разрыв 0-1 уровень → штрафа НЕТ (бой равный)</li>
+                </ul>
+                
+                <p><strong>Если ходит не-лидер (ПЛАВНАЯ ПОМОЩЬ):</strong></p>
+                <ul>
+                    <li>helpBoost = отставание × 5% (максимум 15%)</li>
+                    <li>При отставании на 1 уровень: +5% помощи</li>
+                    <li>При отставании на 2 уровня: +10% помощи</li>
+                    <li>При отставании на 3+ уровня: +15% помощи (лимит!)</li>
+                    <li>(35% + boost) шанс: "Помощь монстру" → "Нейтральный"/"Помощь игроку"</li>
+                    <li>(25% + boost) шанс: "Нейтральный" → "Помощь игроку"</li>
+                </ul>
+                
+                <p><strong>Если все игроки одного уровня:</strong></p>
+                <ul>
+                    <li>Без модификаций, чистый рандом</li>
+                </ul>
+            </div>
+
+            <div class="tactics-section">
+                <h3>💡 Итого</h3>
+                <p>Боты создают хаос, но с умом: они балансируют игру, помогая слабым и мешая сильным. Это делает каждый бой непредсказуемым!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
