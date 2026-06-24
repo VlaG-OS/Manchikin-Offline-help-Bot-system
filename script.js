@@ -562,7 +562,6 @@ function openMobileSettings() {
     document.getElementById('mobileSettings').classList.add('open');
     // Синхронизируем значения
     document.getElementById('playerCountMobile').value = document.getElementById('playerCount').value;
-    document.getElementById('botCountMobile').value = document.getElementById('botCount').value;
 }
 
 function closeMobileSettings() {

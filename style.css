@@ -12,6 +12,7 @@ body {
         radial-gradient(circle at 20% 50%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(101, 67, 33, 0.3) 0%, transparent 50%),
         linear-gradient(135deg, #2c1810 0%, #4a2c1a 50%, #5c3d2e 100%);
+    background-attachment: fixed;
     min-height: 100vh;
     padding: 15px;
     position: relative;
@@ -114,9 +115,9 @@ body::before {
         gap: 0;
     }
     
-    /* Настройка боя - ТОЛЬКО кнопка "Бросить кости" */
+    /* Настройка боя - компактная с полем ботов */
     .setup-section {
-        padding: 0;
+        padding: 8px;
         margin-bottom: 8px;
     }
     
@@ -125,7 +126,18 @@ body::before {
     }
     
     .setup-section .input-group {
-        display: none;
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .setup-section .input-group label {
+        font-size: 0.8em;
+        margin-bottom: 3px;
+    }
+    
+    .setup-section .input-group input {
+        padding: 6px;
+        font-size: 0.9em;
     }
     
     /* Кнопка "Бросить кости" */
@@ -278,13 +290,44 @@ h1 {
 }
 
 .setup-section {
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
+    background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 
+        0 8px 20px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.3);
     margin-bottom: 15px;
-    border: none;
+    border: 3px solid #8b6914;
     position: relative;
+}
+
+.setup-section .input-group {
+    background: rgba(255,255,255,0.6);
+    padding: 8px;
+    border-radius: 6px;
+    border: 2px solid #d4a574;
+    margin-bottom: 10px;
+}
+
+.setup-section .input-group label {
+    display: block;
+    margin-bottom: 4px;
+    color: #5c3d2e;
+    font-weight: bold;
+    font-size: 0.85em;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+.setup-section .input-group input {
+    width: 100%;
+    padding: 6px;
+    border: 2px solid #8b6914;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'MedievalSharp', serif;
+    background: #fff9e6;
+    transition: all 0.3s;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
 }
 
 @media (max-width: 768px) {
