@@ -185,6 +185,16 @@ function changeLevel(playerId, delta) {
     updatePlayerDisplay();
 }
 
+// Изменение уровня монстра
+function changeMonsterLevel(delta) {
+    const monsterInput = document.getElementById('monsterLevel');
+    const monsterDisplay = document.getElementById('monsterLevelDisplay');
+    let currentLevel = parseInt(monsterInput.value) || 5;
+    const newLevel = Math.max(1, Math.min(20, currentLevel + delta));
+    monsterInput.value = newLevel;
+    monsterDisplay.textContent = newLevel;
+}
+
 // Применение модификатора уровня к броску поведения
 function applyLevelBias(behaviorRoll, currentPlayerId, monsterLevel) {
     const leaderId = determineLeader();

@@ -18,19 +18,22 @@
                 <div id="playerLevels" class="player-levels"></div>
                 
                 <button class="next-turn-btn" onclick="nextTurn()">➡️ Следующий ход</button>
-                
-                <button class="settings-btn" onclick="openSettings()">⚙️ Настройки</button>
             </div>
             
             <!-- Правая часть: настройки и результаты -->
             <div class="game-area">
-                <!-- Кнопка "Следующий ход" для мобильных (на десктопе скрыта) -->
+                <!-- Кнопка "Следующий ход" для мобильных -->
                 <button class="next-turn-btn next-turn-btn-mobile" onclick="nextTurn()">➡️ Следующий ход</button>
                 
                 <div class="setup-section">
-                    <div class="input-group">
-                        <label>Уровень монстра (1-20):</label>
-                        <input type="number" id="monsterLevel" min="1" max="20" value="5">
+                    <div class="monster-level-control">
+                        <label>👹 Уровень монстра:</label>
+                        <div class="monster-level-buttons">
+                            <button class="monster-btn monster-btn-down" onclick="changeMonsterLevel(-1)">−</button>
+                            <span class="monster-level-display" id="monsterLevelDisplay">5</span>
+                            <button class="monster-btn monster-btn-up" onclick="changeMonsterLevel(1)">+</button>
+                        </div>
+                        <input type="number" id="monsterLevel" min="1" max="20" value="5" style="display: none;">
                     </div>
                     <button id="rollBtn" class="main-btn">🎲 Бросить кости!</button>
                     <select id="currentPlayer" style="display: none;">
@@ -45,19 +48,17 @@
                     <h3>📊 Итого</h3>
                     <div id="summaryContent"></div>
                     <button id="tacticsBtn" class="tactics-btn" onclick="toggleTactics()">📖 Как играют боты?</button>
+                    <button class="settings-trigger-bottom" onclick="openSettings()">⚙️ Настройки</button>
                 </div>
-                
-                <!-- Кнопка настроек игры для мобильных -->
-                <button class="mobile-settings-trigger" onclick="openMobileSettings()">⚙️ Настройки игры</button>
             </div>
         </div>
     </div>
     
-    <!-- Модальное окно настроек -->
+    <!-- Модальное окно настроек (объединённое) -->
     <div id="settingsModal" class="modal">
         <div class="modal-content" style="max-width: 400px;">
             <span class="close" onclick="closeSettings()">&times;</span>
-            <h2>⚙️ Настройки</h2>
+            <h2>⚙️ Настройки игры</h2>
             
             <div class="input-group">
                 <label>Количество игроков:</label>
@@ -71,26 +72,6 @@
             
             <button class="reset-btn" onclick="resetMatch(); closeSettings();">🔄 Новый матч</button>
         </div>
-    </div>
-
-    <!-- Мобильная панель настроек (полноэкранная) -->
-    <div class="mobile-settings-panel" id="mobileSettings">
-        <div class="mobile-settings-header">
-            <h2>⚙️ Настройки игры</h2>
-            <button class="mobile-close-btn" onclick="closeMobileSettings()">✕</button>
-        </div>
-        
-        <div class="input-group">
-            <label>Количество игроков:</label>
-            <input type="number" id="playerCountMobile" min="1" max="6" value="2" onchange="syncPlayerCount()">
-        </div>
-        
-        <div class="input-group">
-            <label>Количество ботов:</label>
-            <input type="number" id="botCountMobile" min="1" max="6" value="1" onchange="syncBotCount()">
-        </div>
-        
-        <button class="reset-btn" onclick="resetMatch(); closeMobileSettings();">🔄 Новый матч</button>
     </div>
 
     <!-- Модальное окно с тактикой -->

@@ -211,22 +211,7 @@ body::before {
         min-height: 48px;
     }
     
-    /* Кнопка открытия дополнительных настроек внизу */
-    .mobile-settings-trigger {
-        display: block !important;
-        width: 100%;
-        padding: 12px;
-        background: linear-gradient(to bottom, #8b7355 0%, #6b5844 100%);
-        color: #fff;
-        border: 2px solid #5c4a3a;
-        border-radius: 8px;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 10px;
-        font-family: 'Roboto', sans-serif;
-        min-height: 48px;
-    }
+    /* Удалено - больше не используется */
     
     .level-btn {
         width: 44px;
@@ -718,8 +703,9 @@ h2 {
     box-shadow: 
         0 8px 20px rgba(0,0,0,0.6),
         inset 0 1px 0 rgba(255,255,255,0.3);
-    margin-top: 15px;
+    margin-top: 20px;
     border: 3px solid #d4af37;
+    clear: both;
 }
 
 .summary-section h3 {
@@ -1555,10 +1541,7 @@ h2 {
     font-size: 1.1em;
 }
 
-/* Скрываем триггер настроек на десктопе */
-.mobile-settings-trigger {
-    display: none;
-}
+/* Удалено - больше не используется */
 
 /* Мобильная панель настроек */
 .mobile-settings-panel {
@@ -1606,4 +1589,423 @@ h2 {
     font-weight: bold;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
+}
+
+
+/* Контрол уровня монстра с кнопками */
+.monster-level-control {
+    background: rgba(255,255,255,0.8);
+    padding: 12px;
+    border-radius: 8px;
+    border: 3px solid #8b0000;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.monster-level-control label {
+    color: #8b0000;
+    font-weight: bold;
+    font-size: 1em;
+    flex-shrink: 0;
+}
+
+.monster-level-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.monster-btn {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(to bottom, #dc143c 0%, #8b0000 100%);
+    color: white;
+    border: 3px solid #660000;
+    border-radius: 8px;
+    font-size: 1.8em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.monster-btn:hover {
+    background: linear-gradient(to bottom, #ff1744 0%, #dc143c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(220, 20, 60, 0.5);
+}
+
+.monster-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.monster-level-display {
+    font-size: 2em;
+    font-weight: bold;
+    color: #8b0000;
+    min-width: 50px;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Кнопка настроек внизу под итогами */
+.settings-trigger-bottom {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    background: linear-gradient(to bottom, #8b7355 0%, #6b5844 100%);
+    color: #fff9e6;
+    border: 2px solid #5c4a3a;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: 'MedievalSharp', serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    min-height: 48px;
+}
+
+.settings-trigger-bottom:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(to bottom, #a0866b 0%, #8b7355 100%);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+}
+
+.settings-trigger-bottom:active {
+    transform: translateY(0);
+}
+
+/* Скрыть кнопку настроек в панели игроков */
+.settings-btn {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .monster-level-control {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .monster-level-control label {
+        font-size: 0.9em;
+    }
+    
+    .monster-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.5em;
+    }
+    
+    .monster-level-display {
+        font-size: 1.6em;
+        min-width: 40px;
+    }
+}
+
+/* Улучшения для ПК */
+@media (min-width: 769px) {
+    .main-layout {
+        grid-template-columns: 240px 1fr;
+        gap: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .players-panel {
+        padding: 15px;
+    }
+    
+    .player-item {
+        margin-bottom: 8px;
+        min-height: 50px;
+    }
+    
+    .game-area {
+        max-width: 900px;
+    }
+    
+    .setup-section {
+        margin-bottom: 20px;
+    }
+    
+    .results-section {
+        margin-bottom: 20px;
+    }
+    
+    .summary-section {
+        padding: 15px;
+    }
+    
+    /* Отступы для карточек ботов чтобы не налезали на итоги */
+    .results-section {
+        padding-bottom: 20px;
+    }
+}
+
+
+/* Дополнительные улучшения интерфейса */
+
+/* Убираем overflow у body для чистого вида */
+body {
+    overflow-x: hidden;
+}
+
+/* Улучшаем заголовок */
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-family: 'Creepster', cursive;
+    color: #d4af37;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+    font-size: 2em;
+}
+
+/* Улучшаем карточки игроков на ПК */
+@media (min-width: 769px) {
+    .player-info {
+        padding: 8px;
+    }
+    
+    .player-name-compact {
+        font-size: 0.95em;
+    }
+    
+    .player-level-compact {
+        font-size: 1.1em;
+    }
+}
+
+/* Убираем лишние отступы на мобильных */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+    
+    .container {
+        padding: 0;
+    }
+}
+
+/* Улучшаем читаемость итогов */
+.summary-item {
+    line-height: 1.4;
+}
+
+/* Плавные переходы для всех интерактивных элементов */
+button {
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Предотвращаем случайное выделение текста при нажатии */
+.level-btn, .monster-btn, .main-btn, .next-turn-btn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Улучшаем spacing для results-section */
+.results-section {
+    margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    .results-section {
+        margin-top: 12px;
+    }
+}
+
+/* Фикс для того чтобы итоги не прыгали при появлении */
+.summary-section {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Улучшаем кнопку тактики */
+.tactics-btn {
+    transition: all 0.2s ease;
+}
+
+/* Убираем синюю подсветку на мобильных при нажатии */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Улучшаем модальные окна на мобильных */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+        margin: 20px auto;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+}
+
+/* Фикс для inputs в модальных окнах */
+.modal .input-group input {
+    font-size: 16px; /* Предотвращает зум на iOS */
+}
+
+/* Улучшаем карточки ботов - добавляем немного воздуха */
+.bot-card {
+    transition: transform 0.2s ease;
+}
+
+.bot-card:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .bot-card:hover {
+        transform: none; /* Отключаем hover на мобильных */
+    }
+}
+
+/* Улучшаем visibility кнопки настроек на ПК */
+@media (min-width: 769px) {
+    .settings-trigger-bottom {
+        max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+/* Performance optimizations */
+.bot-card, .player-item, .main-btn, .next-turn-btn {
+    will-change: transform;
+}
+
+/* Улучшаем touch targets на мобильных */
+@media (max-width: 768px) {
+    /* Все кликабельные элементы минимум 44x44px */
+    button, .level-btn, .monster-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    /* Увеличиваем зону нажатия для маленьких элементов */
+    .dice {
+        pointer-events: none; /* Нельзя нажимать на декоративные элементы */
+    }
+}
+
+/* Улучшаем scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Фикс для iOS Safari - убираем bounce эффект */
+body {
+    overscroll-behavior-y: contain;
+}
+
+/* Улучшаем контрастность текста в summary */
+.summary-item {
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+/* Делаем более заметными активные состояния */
+button:active {
+    opacity: 0.9;
+}
+
+/* Улучшаем spacing между карточками ботов и итогами на мобильных */
+@media (max-width: 768px) {
+    .summary-section {
+        margin-top: 15px;
+    }
+    
+    .results-section {
+        margin-bottom: 15px;
+    }
+}
+
+/* Фикс для длинных чисел в отображении уровня монстра */
+.monster-level-display {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Улучшаем читаемость на ярком солнце (увеличиваем контраст) */
+@media (max-width: 768px) {
+    .monster-level-control {
+        border-width: 2px;
+    }
+    
+    .player-item {
+        border-width: 2px;
+    }
+}
+
+/* Добавляем небольшой padding к container на мобильных */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 4px;
+    }
+}
+
+/* Улучшаем отображение бейджей игроков */
+.player-badges {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Фикс для предотвращения двойного нажатия */
+button {
+    touch-action: manipulation;
+}
+
+/* Улучшаем визуальный feedback на нажатие */
+.monster-btn:active,
+.level-btn:active {
+    filter: brightness(0.9);
+}
+
+/* Делаем карточки ботов более компактными на очень маленьких экранах */
+@media (max-width: 380px) {
+    .bot-card {
+        padding: 8px;
+        font-size: 0.9em;
+    }
+    
+    .bot-name {
+        font-size: 0.85em;
+    }
+    
+    .dice {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+    }
+}
+
+/* Улучшаем центрирование контента на очень широких экранах */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 }
