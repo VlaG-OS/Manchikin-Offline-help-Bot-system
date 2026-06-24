@@ -41,8 +41,9 @@ body::before {
 
 .main-layout {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 15px;
+    align-items: start;
 }
 
 @media (max-width: 1024px) {
@@ -113,15 +114,14 @@ body::before {
         gap: 0;
     }
     
-    /* Настройка боя - скрываем заголовок и поля ввода, оставляем только кнопку броска */
+    /* Настройка боя - ТОЛЬКО кнопка "Бросить кости" */
     .setup-section {
-        padding: 8px;
+        padding: 0;
         margin-bottom: 8px;
     }
     
     .setup-section h2 {
-        font-size: 0.95em;
-        margin-bottom: 6px;
+        display: none;
     }
     
     .setup-section .input-group {
@@ -228,7 +228,7 @@ body::before {
 
 .players-panel {
     background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
-    padding: 15px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 
         0 8px 20px rgba(0,0,0,0.5),
@@ -237,6 +237,11 @@ body::before {
     height: fit-content;
     position: sticky;
     top: 15px;
+}
+
+.players-panel h2 {
+    font-size: 1em;
+    margin-bottom: 8px;
 }
 
 @media (max-width: 768px) {
@@ -273,14 +278,12 @@ h1 {
 }
 
 .setup-section {
-    background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 
-        0 8px 20px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.3);
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
     margin-bottom: 15px;
-    border: 3px solid #8b6914;
+    border: none;
     position: relative;
 }
 
@@ -423,6 +426,58 @@ h2 {
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(3, 1fr);
+}
+
+/* Адаптивный размер ботов в зависимости от количества */
+.results-section[data-bot-count="1"],
+.results-section[data-bot-count="2"] {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.results-section[data-bot-count="3"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.results-section[data-bot-count="4"],
+.results-section[data-bot-count="5"],
+.results-section[data-bot-count="6"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Компактные карточки для 4+ ботов */
+.results-section[data-bot-count="4"] .bot-card,
+.results-section[data-bot-count="5"] .bot-card,
+.results-section[data-bot-count="6"] .bot-card {
+    padding: 6px;
+}
+
+.results-section[data-bot-count="4"] .bot-name,
+.results-section[data-bot-count="5"] .bot-name,
+.results-section[data-bot-count="6"] .bot-name {
+    font-size: 0.85em;
+}
+
+.results-section[data-bot-count="4"] .dice,
+.results-section[data-bot-count="5"] .dice,
+.results-section[data-bot-count="6"] .dice {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+}
+
+.results-section[data-bot-count="4"] .detail-row,
+.results-section[data-bot-count="5"] .detail-row,
+.results-section[data-bot-count="6"] .detail-row {
+    padding: 4px;
+    font-size: 0.7em;
+}
+
+.results-section[data-bot-count="4"] .energy-bar,
+.results-section[data-bot-count="5"] .energy-bar,
+.results-section[data-bot-count="6"] .energy-bar {
+    font-size: 0.7em;
+    padding: 3px 5px;
+    margin-bottom: 4px;
 }
 
 @media (max-width: 1024px) {
@@ -613,7 +668,7 @@ h2 {
 
 .summary-section {
     background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
-    padding: 15px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 
         0 8px 20px rgba(0,0,0,0.6),
@@ -624,18 +679,18 @@ h2 {
 
 .summary-section h3 {
     color: #8b4513;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 1.1em;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     font-family: 'Creepster', cursive;
 }
 
 .summary-item {
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 6px;
+    margin-bottom: 5px;
     border-radius: 8px;
-    font-size: 0.95em;
+    font-size: 0.85em;
     font-weight: bold;
     border: 2px solid;
     box-shadow: 0 3px 8px rgba(0,0,0,0.3);
@@ -687,13 +742,13 @@ h2 {
 /* Кнопка тактики */
 .tactics-btn {
     width: 100%;
-    margin-top: 12px;
-    padding: 10px;
+    margin-top: 8px;
+    padding: 8px;
     background: linear-gradient(to bottom, #8b7355 0%, #6b5844 100%);
     color: #fff9e6;
     border: 2px solid #5c4a3a;
     border-radius: 8px;
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: bold;
     font-family: 'MedievalSharp', serif;
     cursor: pointer;
@@ -845,11 +900,25 @@ h2 {
 
 .player-item {
     background: rgba(255,255,255,0.7);
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
     border: 2px solid #d4a574;
     transition: all 0.3s;
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.player-name {
+    font-weight: bold;
+    color: #5c3d2e;
+    font-size: 0.9em;
+    font-family: 'Roboto', sans-serif;
 }
 
 .player-item.leader {
@@ -891,24 +960,24 @@ h2 {
 .player-controls {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .level-control {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
 }
 
 .level-btn {
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     background: linear-gradient(to bottom, #d4af37 0%, #b8941e 100%);
     color: #2c1810;
     border: 2px solid #8b6914;
     border-radius: 5px;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s;
@@ -930,12 +999,12 @@ h2 {
     flex: 1;
     text-align: center;
     background: #fff9e6;
-    padding: 5px;
+    padding: 4px;
     border-radius: 5px;
     border: 2px solid #8b6914;
     font-weight: bold;
     color: #5c3d2e;
-    font-size: 1.1em;
+    font-size: 0.95em;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -1221,14 +1290,14 @@ h2 {
 /* Большая кнопка "Следующий ход" */
 .next-turn-btn {
     width: 100%;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding: 12px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    padding: 8px;
     background: linear-gradient(to bottom, #4169e1 0%, #1e3a8a 100%);
     color: white;
     border: 3px solid #1e3a8a;
     border-radius: 8px;
-    font-size: 1.1em;
+    font-size: 0.95em;
     font-weight: bold;
     font-family: 'Creepster', cursive;
     cursor: pointer;

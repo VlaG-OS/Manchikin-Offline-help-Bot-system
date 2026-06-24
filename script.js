@@ -461,6 +461,9 @@ document.getElementById('rollBtn').addEventListener('click', function() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
     
+    // Добавляем атрибут для адаптивного размера карточек
+    resultsDiv.setAttribute('data-bot-count', botCount);
+    
     let totalPlayerBonus = 0;
     let totalMonsterBonus = 0;
     
