@@ -13,9 +13,10 @@ body {
         radial-gradient(circle at 80% 80%, rgba(101, 67, 33, 0.3) 0%, transparent 50%),
         linear-gradient(135deg, #2c1810 0%, #4a2c1a 50%, #5c3d2e 100%);
     background-attachment: fixed;
-    min-height: 100vh;
+    height: 100vh;
     padding: 15px;
     position: relative;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -115,29 +116,10 @@ body::before {
         gap: 0;
     }
     
-    /* Настройка боя - компактная с полем ботов */
+    /* Настройка боя - только кнопка броска */
     .setup-section {
-        padding: 8px;
+        padding: 0;
         margin-bottom: 8px;
-    }
-    
-    .setup-section h2 {
-        display: none;
-    }
-    
-    .setup-section .input-group {
-        padding: 6px;
-        margin-bottom: 6px;
-    }
-    
-    .setup-section .input-group label {
-        font-size: 0.8em;
-        margin-bottom: 3px;
-    }
-    
-    .setup-section .input-group input {
-        padding: 6px;
-        font-size: 0.9em;
     }
     
     /* Кнопка "Бросить кости" */
@@ -290,44 +272,17 @@ h1 {
 }
 
 .setup-section {
-    background: linear-gradient(to bottom, #f4e4c1 0%, #e8d4a8 100%);
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 
-        0 8px 20px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.3);
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
     margin-bottom: 15px;
-    border: 3px solid #8b6914;
+    border: none;
     position: relative;
 }
 
 .setup-section .input-group {
-    background: rgba(255,255,255,0.6);
-    padding: 8px;
-    border-radius: 6px;
-    border: 2px solid #d4a574;
-    margin-bottom: 10px;
-}
-
-.setup-section .input-group label {
-    display: block;
-    margin-bottom: 4px;
-    color: #5c3d2e;
-    font-weight: bold;
-    font-size: 0.85em;
-    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
-}
-
-.setup-section .input-group input {
-    width: 100%;
-    padding: 6px;
-    border: 2px solid #8b6914;
-    border-radius: 5px;
-    font-size: 14px;
-    font-family: 'MedievalSharp', serif;
-    background: #fff9e6;
-    transition: all 0.3s;
-    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -943,25 +898,96 @@ h2 {
 
 .player-item {
     background: rgba(255,255,255,0.7);
-    padding: 8px;
+    padding: 0;
     border-radius: 6px;
     margin-bottom: 6px;
     border: 2px solid #d4a574;
     transition: all 0.3s;
-}
-
-.player-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
+    align-items: stretch;
+    min-height: 40px;
+    overflow: hidden;
 }
 
-.player-name {
+.player-item.leader {
+    border-color: #ffd700;
+    background: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.player-item.current-turn {
+    border-color: #32cd32;
+    background: rgba(50, 205, 50, 0.15);
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
+}
+
+.player-item.leader.current-turn {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(50, 205, 50, 0.15));
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.level-btn-left,
+.level-btn-right {
+    width: 32px;
+    min-height: 100%;
+    background: linear-gradient(to bottom, #d4af37 0%, #b8941e 100%);
+    color: #2c1810;
+    border: none;
+    border-radius: 0;
+    font-size: 1.3em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.level-btn-left {
+    border-radius: 4px 0 0 4px;
+}
+
+.level-btn-right {
+    border-radius: 0 4px 4px 0;
+}
+
+.level-btn-left:hover,
+.level-btn-right:hover {
+    background: linear-gradient(to bottom, #ffd700 0%, #d4af37 100%);
+}
+
+.level-btn-left:active,
+.level-btn-right:active {
+    transform: scale(0.95);
+}
+
+.player-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    gap: 8px;
+}
+
+.player-name-compact {
     font-weight: bold;
     color: #5c3d2e;
+    font-size: 0.95em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.player-level-compact {
+    font-weight: bold;
+    color: #8b6914;
     font-size: 0.9em;
     font-family: 'Roboto', sans-serif;
+}
+
+.player-badges {
+    font-size: 1em;
 }
 
 .player-item.leader {
@@ -1356,6 +1382,32 @@ h2 {
 }
 
 .next-turn-btn:active {
+    transform: translateY(0);
+}
+
+/* Кнопка настроек */
+.settings-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 8px;
+    background: linear-gradient(to bottom, #8b7355 0%, #6b5844 100%);
+    color: white;
+    border: 2px solid #5c4a3a;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.settings-btn:hover {
+    background: linear-gradient(to bottom, #a0866b 0%, #8b7355 100%);
+    transform: translateY(-2px);
+}
+
+.settings-btn:active {
     transform: translateY(0);
 }
 

@@ -141,24 +141,13 @@ function updatePlayerDisplay() {
         const playerDiv = document.createElement('div');
         playerDiv.className = classNames;
         playerDiv.innerHTML = `
-            <div class="player-header">
-                <span class="player-name">Игрок ${i}</span>
-                <span class="player-badges">
-                    ${isLeader ? '👑' : ''}
-                </span>
+            <button class="level-btn level-btn-left" onclick="changeLevel(${i}, -1)">−</button>
+            <div class="player-info">
+                <span class="player-name-compact">P${i}</span>
+                <span class="player-level-compact">${level} LVL</span>
+                <span class="player-badges">${isLeader ? '👑' : ''}${isCurrentTurn ? '🎯' : ''}</span>
             </div>
-            <div class="player-controls">
-                <div class="level-control">
-                    <button class="level-btn" onclick="changeLevel(${i}, -1)">−</button>
-                    <div class="level-display">Ур. ${level}</div>
-                    <button class="level-btn" onclick="changeLevel(${i}, 1)">+</button>
-                </div>
-                <button class="turn-marker-btn ${isCurrentTurn ? 'active' : ''}" 
-                        onclick="setCurrentPlayer(${i})"
-                        title="Установить как текущего игрока">
-                    ${isCurrentTurn ? '🎯 Ходит' : 'Ходит?'}
-                </button>
-            </div>
+            <button class="level-btn level-btn-right" onclick="changeLevel(${i}, 1)">+</button>
         `;
         container.appendChild(playerDiv);
     }
@@ -372,6 +361,17 @@ function showNotification(message) {
         setTimeout(() => notification.remove(), 300);
     }, 3000);
 }
+
+// Открыть настройки
+function openSettings() {
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+
+// Закрыть настройки
+function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+}
+
 function toggleTactics() {
     const modal = document.getElementById('tacticsModal');
     if (modal.style.display === 'flex') {
@@ -391,9 +391,14 @@ function toggleTactics() {
 // Закрытие модального окна при клике вне его
 window.onclick = function(event) {
     const tacticsModal = document.getElementById('tacticsModal');
+    const settingsModal = document.getElementById('settingsModal');
     
     if (event.target === tacticsModal) {
         tacticsModal.style.display = 'none';
+    }
+    
+    if (event.target === settingsModal) {
+        settingsModal.style.display = 'none';
     }
 }
 

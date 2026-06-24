@@ -15,16 +15,11 @@
             <div class="players-panel">
                 <h2>👥 Игроки</h2>
                 
-                <div class="input-group">
-                    <label>Количество игроков:</label>
-                    <input type="number" id="playerCount" min="1" max="6" value="2">
-                </div>
-                
                 <div id="playerLevels" class="player-levels"></div>
                 
                 <button class="next-turn-btn" onclick="nextTurn()">➡️ Следующий ход</button>
                 
-                <button class="reset-btn" onclick="resetMatch()">🔄 Новый матч</button>
+                <button class="settings-btn" onclick="openSettings()">⚙️ Настройки</button>
             </div>
             
             <!-- Правая часть: настройки и результаты -->
@@ -33,15 +28,11 @@
                 <button class="next-turn-btn" style="display: none;" onclick="nextTurn()">➡️ Следующий ход</button>
                 
                 <div class="setup-section">
-                    <div class="input-group">
-                        <label>Количество ботов:</label>
-                        <input type="number" id="botCount" min="1" max="6" value="1">
-                    </div>
+                    <button id="rollBtn" class="main-btn">🎲 Бросить кости!</button>
                     <select id="currentPlayer" style="display: none;">
                         <option value="1">Игрок 1</option>
                         <option value="2">Игрок 2</option>
                     </select>
-                    <button id="rollBtn" class="main-btn">🎲 Бросить кости!</button>
                 </div>
 
                 <div id="results" class="results-section"></div>
@@ -58,6 +49,26 @@
         </div>
     </div>
     
+    <!-- Модальное окно настроек -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span class="close" onclick="closeSettings()">&times;</span>
+            <h2>⚙️ Настройки</h2>
+            
+            <div class="input-group">
+                <label>Количество игроков:</label>
+                <input type="number" id="playerCount" min="1" max="6" value="2">
+            </div>
+            
+            <div class="input-group">
+                <label>Количество ботов:</label>
+                <input type="number" id="botCount" min="1" max="6" value="1">
+            </div>
+            
+            <button class="reset-btn" onclick="resetMatch(); closeSettings();">🔄 Новый матч</button>
+        </div>
+    </div>
+
     <!-- Мобильная панель настроек (полноэкранная) -->
     <div class="mobile-settings-panel" id="mobileSettings">
         <div class="mobile-settings-header">
