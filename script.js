@@ -186,7 +186,7 @@ function changeLevel(playerId, delta) {
 }
 
 // Применение модификатора уровня к броску поведения
-function applyLevelBias(behaviorRoll, currentPlayerId) {
+function applyLevelBias(behaviorRoll, currentPlayerId, monsterLevel) {
     const leaderId = determineLeader();
     
     // Если никто не лидирует - без модификации
@@ -198,6 +198,9 @@ function applyLevelBias(behaviorRoll, currentPlayerId) {
     const leaderLevel = playerLevels[leaderId] || 1;
     const levelDiff = currentLevel - leaderLevel;
     
+    // ИЗМЕНЕНИЕ 2: Контекст боя
+    const combatGap = currentLevel - monsterLevel;
+    
     // Если ходит лидер - меньше помощи ему (НО только если большое преимущество!)
     if (currentPlayerId === leaderId) {
         // Проверяем: есть ли игроки, отстающие на 2+ уровня?
@@ -205,10 +208,16 @@ function applyLevelBias(behaviorRoll, currentPlayerId) {
         const minLevel = Math.min(...playerIds.map(id => playerLevels[id]));
         const gap = leaderLevel - minLevel;
         
+        // ИЗМЕНЕНИЕ 4: Особый случай - уровень 9
+        let shiftChance = 0.30; // стандартный штраф
+        if (currentLevel === 9) {
+            shiftChance = 0.60; // все хотят помешать финальному рывку
+        }
+        
         // Штраф применяется только если лидер впереди на 2+ уровня
         if (gap >= 2 && behaviorRoll <= 2) {
-            // Сдвиг помощи игроку в нейтрал (25% шанс, мягче!)
-            if (Math.random() < 0.25) {
+            // Сдвиг помощи игроку в нейтрал
+            if (Math.random() < shiftChance) {
                 return 3;
             }
         }
@@ -216,8 +225,16 @@ function applyLevelBias(behaviorRoll, currentPlayerId) {
     
     // Если ходит не лидер - больше помощи ему
     if (currentPlayerId !== leaderId && levelDiff < 0) {
-        // Плавный рост помощи: максимум 15% при отставании на 3+ уровня
-        const helpBoost = Math.min(Math.abs(levelDiff) * 0.05, 0.15);
+        // ИЗМЕНЕНИЕ 3: Три тира helpBoost вместо линейного
+        const absLevelDiff = Math.abs(levelDiff);
+        let helpBoost;
+        if (absLevelDiff <= 2) {
+            helpBoost = 0.10; // Небольшое отставание
+        } else if (absLevelDiff <= 4) {
+            helpBoost = 0.20; // Среднее отставание
+        } else {
+            helpBoost = 0.35; // Критическое отставание
+        }
         
         if (behaviorRoll >= 5) {
             // Сдвиг помощи монстру в нейтрал или помощь игроку
@@ -233,7 +250,24 @@ function applyLevelBias(behaviorRoll, currentPlayerId) {
         }
     }
     
-    return behaviorRoll;
+    // ИЗМЕНЕНИЕ 2: Применение контекста боя (применяется ВМЕСТЕ с модификаторами уровня)
+    let contextModified = behaviorRoll;
+    
+    // Игрок явно побеждает (combatGap >= 4)
+    if (combatGap >= 4 && behaviorRoll <= 2) {
+        if (Math.random() < 0.25) {
+            contextModified = 3; // Бот не добивает монстра когда и так всё ясно
+        }
+    }
+    
+    // Монстр явно побеждает (combatGap <= -4)
+    if (combatGap <= -4 && behaviorRoll >= 5) {
+        if (Math.random() < 0.40) {
+            contextModified = 3; // Бот сочувствует явно проигрывающему игроку
+        }
+    }
+    
+    return contextModified;
 }
 
 // Определение типа поведения
@@ -447,6 +481,7 @@ document.getElementById('rollBtn').addEventListener('click', function() {
     const botCount = parseInt(document.getElementById('botCount').value);
     const playerCount = parseInt(document.getElementById('playerCount').value);
     const currentPlayerId = parseInt(document.getElementById('currentPlayer').value);
+    const monsterLevel = parseInt(document.getElementById('monsterLevel').value);
     
     if (botCount < 1 || botCount > 6) {
         alert('Количество ботов должно быть от 1 до 6');
@@ -455,6 +490,11 @@ document.getElementById('rollBtn').addEventListener('click', function() {
     
     if (playerCount < 1 || playerCount > 6) {
         alert('Количество игроков должно быть от 1 до 6');
+        return;
+    }
+    
+    if (monsterLevel < 1 || monsterLevel > 20) {
+        alert('Уровень монстра должен быть от 1 до 20');
         return;
     }
     
@@ -478,7 +518,7 @@ document.getElementById('rollBtn').addEventListener('click', function() {
     for (let i = 0; i < botCount; i++) {
         const bot = botStorage[i];
         const behaviorRoll = rollD6();
-        const modifiedRoll = applyLevelBias(behaviorRoll, currentPlayerId);
+        const modifiedRoll = applyLevelBias(behaviorRoll, currentPlayerId, monsterLevel);
         const strengthRoll = rollD6();
         
         const behavior = getBehaviorType(modifiedRoll);
@@ -525,6 +565,20 @@ document.getElementById('rollBtn').addEventListener('click', function() {
         resultsDiv.appendChild(botCard);
     }
     
+    // ИЗМЕНЕНИЕ 5: Кэп стакания ботов
+    let cappedPlayer = false;
+    let cappedMonster = false;
+    
+    if (totalPlayerBonus > 10) {
+        totalPlayerBonus = 10;
+        cappedPlayer = true;
+    }
+    
+    if (totalMonsterBonus > 10) {
+        totalMonsterBonus = 10;
+        cappedMonster = true;
+    }
+    
     // Показать итоги
     const summaryDiv = document.getElementById('summary');
     const summaryContent = document.getElementById('summaryContent');
@@ -533,19 +587,23 @@ document.getElementById('rollBtn').addEventListener('click', function() {
     const currentPlayerName = `Игрок ${currentPlayerId}`;
     const currentPlayerLevel = playerLevels[currentPlayerId] || 1;
     const leaderName = leaderId === 0 ? 'Никто' : `Игрок ${leaderId} (Ур. ${playerLevels[leaderId]})`;
+    const combatGap = currentPlayerLevel - monsterLevel;
     
     summaryContent.innerHTML = `
         <div class="summary-item summary-info">
-            👥 В игре: ${playerCount} игрок(ов)
+            👥 В игре: ${playerCount} игрок(ов) | 👹 Монстр: уровень ${monsterLevel}
         </div>
         <div class="summary-item summary-leader">
             � Лидер: ${leaderName} | 🎯 Ходит: ${currentPlayerName} (Ур. ${currentPlayerLevel})
         </div>
+        <div class="summary-item summary-combat">
+            ⚔️ Разрыв боя: ${combatGap > 0 ? '+' : ''}${combatGap} ${combatGap >= 4 ? '(Игрок побеждает)' : combatGap <= -4 ? '(Монстр побеждает)' : '(Равная схватка)'}
+        </div>
         <div class="summary-item summary-player">
-            🧙 Бонус игрокам: +${totalPlayerBonus}
+            🧙 Бонус игрокам: +${totalPlayerBonus}${cappedPlayer ? ' <span class="capped">(ограничено)</span>' : ''}
         </div>
         <div class="summary-item summary-monster">
-            👹 Бонус монстру: +${totalMonsterBonus}
+            👹 Бонус монстру: +${totalMonsterBonus}${cappedMonster ? ' <span class="capped">(ограничено)</span>' : ''}
         </div>
     `;
 });

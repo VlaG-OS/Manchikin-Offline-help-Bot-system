@@ -25,9 +25,13 @@
             <!-- Правая часть: настройки и результаты -->
             <div class="game-area">
                 <!-- Кнопка "Следующий ход" для мобильных (на десктопе скрыта) -->
-                <button class="next-turn-btn" style="display: none;" onclick="nextTurn()">➡️ Следующий ход</button>
+                <button class="next-turn-btn next-turn-btn-mobile" onclick="nextTurn()">➡️ Следующий ход</button>
                 
                 <div class="setup-section">
+                    <div class="input-group">
+                        <label>Уровень монстра (1-20):</label>
+                        <input type="number" id="monsterLevel" min="1" max="20" value="5">
+                    </div>
                     <button id="rollBtn" class="main-btn">🎲 Бросить кости!</button>
                     <select id="currentPlayer" style="display: none;">
                         <option value="1">Игрок 1</option>
@@ -79,6 +83,11 @@
         <div class="input-group">
             <label>Количество игроков:</label>
             <input type="number" id="playerCountMobile" min="1" max="6" value="2" onchange="syncPlayerCount()">
+        </div>
+        
+        <div class="input-group">
+            <label>Количество ботов:</label>
+            <input type="number" id="botCountMobile" min="1" max="6" value="1" onchange="syncBotCount()">
         </div>
         
         <button class="reset-btn" onclick="resetMatch(); closeMobileSettings();">🔄 Новый матч</button>

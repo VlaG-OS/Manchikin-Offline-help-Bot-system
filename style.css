@@ -13,7 +13,7 @@ body {
         radial-gradient(circle at 80% 80%, rgba(101, 67, 33, 0.3) 0%, transparent 50%),
         linear-gradient(135deg, #2c1810 0%, #4a2c1a 50%, #5c3d2e 100%);
     background-attachment: fixed;
-    height: 100vh;
+    min-height: 100dvh;
     padding: 15px;
     position: relative;
     overflow-y: auto;
@@ -101,9 +101,21 @@ body::before {
     }
     
     /* Все игроки видны, компактно, БЕЗ кнопки "Ходит?" */
+    .player-levels {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
+    
     .player-item {
         padding: 6px;
-        margin-bottom: 5px;
+        margin-bottom: 0;
+        min-height: 44px;
+        flex: 1 1 calc(50% - 3px);
+        min-width: 140px;
     }
     
     /* Скрываем кнопки "Ходит?" на мобильных */
@@ -128,14 +140,28 @@ body::before {
         font-size: 1em;
     }
     
-    /* Карточки ботов - 1 колонка */
+    /* Карточки ботов - адаптивно */
     .results-section {
-        grid-template-columns: 1fr;
         gap: 6px;
         margin-bottom: 8px;
     }
     
+    /* 1-2 бота - одна колонка */
+    .results-section[data-bot-count="1"],
+    .results-section[data-bot-count="2"] {
+        grid-template-columns: 1fr;
+    }
+    
+    /* 3+ бота - две колонки */
+    .results-section[data-bot-count="3"],
+    .results-section[data-bot-count="4"],
+    .results-section[data-bot-count="5"],
+    .results-section[data-bot-count="6"] {
+        grid-template-columns: 1fr 1fr;
+    }
+    
     .bot-card {
+        max-height: 160px;
         padding: 6px;
     }
     
@@ -180,30 +206,32 @@ body::before {
     
     /* Кнопка тактики компактнее */
     .tactics-btn {
-        padding: 8px;
-        font-size: 0.9em;
+        padding: 12px;
+        font-size: 1em;
+        min-height: 48px;
     }
     
     /* Кнопка открытия дополнительных настроек внизу */
     .mobile-settings-trigger {
         display: block !important;
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         background: linear-gradient(to bottom, #8b7355 0%, #6b5844 100%);
         color: #fff;
         border: 2px solid #5c4a3a;
         border-radius: 8px;
-        font-size: 0.95em;
+        font-size: 1em;
         font-weight: bold;
         cursor: pointer;
         margin-top: 10px;
         font-family: 'Roboto', sans-serif;
+        min-height: 48px;
     }
     
     .level-btn {
-        width: 26px;
-        height: 26px;
-        font-size: 0.95em;
+        width: 44px;
+        min-height: 44px;
+        font-size: 1.2em;
     }
     
     .level-display {
@@ -281,10 +309,6 @@ h1 {
     position: relative;
 }
 
-.setup-section .input-group {
-    display: none;
-}
-
 @media (max-width: 768px) {
     .setup-section {
         padding: 12px;
@@ -348,6 +372,28 @@ h2 {
         font-size: 0.85em;
         margin-bottom: 4px;
     }
+    
+    /* Компактный вид для поля уровня монстра */
+    .setup-section .input-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        min-height: 44px;
+        margin-bottom: 8px;
+    }
+    
+    .setup-section .input-group label {
+        margin-bottom: 0;
+        flex: 1;
+    }
+    
+    .setup-section .input-group input {
+        width: 70px;
+        text-align: center;
+        padding: 8px;
+        flex-shrink: 0;
+    }
 }
 
 .input-group input,
@@ -400,8 +446,9 @@ h2 {
 
 @media (max-width: 768px) {
     .main-btn {
-        padding: 10px;
+        padding: 14px;
         font-size: 1em;
+        min-height: 52px;
     }
 }
 
@@ -735,6 +782,18 @@ h2 {
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
     color: #8b0000;
     border-color: #dc143c;
+}
+
+.summary-combat {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #8b6508;
+    border-color: #daa520;
+}
+
+.capped {
+    font-size: 0.85em;
+    color: #ff4500;
+    font-weight: bold;
 }
 
 /* Кнопка тактики */
@@ -1286,8 +1345,9 @@ h2 {
 
 @media (max-width: 768px) {
     .reset-btn {
-        padding: 8px;
-        font-size: 0.9em;
+        padding: 12px;
+        font-size: 1em;
+        min-height: 48px;
     }
 }
 
@@ -1373,6 +1433,27 @@ h2 {
     transition: all 0.3s;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     letter-spacing: 1px;
+}
+
+/* Кнопка в game-area - на десктопе скрыта */
+.next-turn-btn-mobile {
+    display: none;
+}
+
+/* На мобильных - кнопка в game-area видна, в панели игроков скрыта */
+@media (max-width: 768px) {
+    .next-turn-btn-mobile {
+        display: block;
+        padding: 12px;
+        font-size: 1em;
+        min-height: 48px;
+        margin-bottom: 8px;
+        margin-top: 0;
+    }
+    
+    .players-panel .next-turn-btn {
+        display: none !important;
+    }
 }
 
 .next-turn-btn:hover {
