@@ -198,69 +198,65 @@ function changeMonsterLevel(delta) {
 // Применение модификатора уровня к броску поведения
 function applyLevelBias(behaviorRoll, currentPlayerId, monsterLevel) {
     const leaderId = determineLeader();
-    
-    // Если никто не лидирует - без модификации
-    if (leaderId === 0) {
-        return behaviorRoll;
-    }
-    
     const currentLevel = playerLevels[currentPlayerId] || 1;
-    const leaderLevel = playerLevels[leaderId] || 1;
-    const levelDiff = currentLevel - leaderLevel;
-    
-    // ИЗМЕНЕНИЕ 2: Контекст боя
     const combatGap = currentLevel - monsterLevel;
     
-    // Если ходит лидер - меньше помощи ему (НО только если большое преимущество!)
-    if (currentPlayerId === leaderId) {
-        // Проверяем: есть ли игроки, отстающие на 2+ уровня?
-        const playerIds = Object.keys(playerLevels);
-        const minLevel = Math.min(...playerIds.map(id => playerLevels[id]));
-        const gap = leaderLevel - minLevel;
+    // Если есть лидер - применяем модификаторы уровня
+    if (leaderId !== 0) {
+        const leaderLevel = playerLevels[leaderId] || 1;
+        const levelDiff = currentLevel - leaderLevel;
         
-        // ИЗМЕНЕНИЕ 4: Особый случай - уровень 9
-        let shiftChance = 0.30; // стандартный штраф
-        if (currentLevel === 9) {
-            shiftChance = 0.60; // все хотят помешать финальному рывку
+        // Если ходит лидер - меньше помощи ему (НО только если большое преимущество!)
+        if (currentPlayerId === leaderId) {
+            // Проверяем: есть ли игроки, отстающие на 2+ уровня?
+            const playerIds = Object.keys(playerLevels);
+            const minLevel = Math.min(...playerIds.map(id => playerLevels[id]));
+            const gap = leaderLevel - minLevel;
+            
+            // ИЗМЕНЕНИЕ 4: Особый случай - уровень 9
+            let shiftChance = 0.30; // стандартный штраф
+            if (currentLevel === 9) {
+                shiftChance = 0.60; // все хотят помешать финальному рывку
+            }
+            
+            // Штраф применяется только если лидер впереди на 2+ уровня
+            if (gap >= 2 && behaviorRoll <= 2) {
+                // Сдвиг помощи игроку в нейтрал
+                if (Math.random() < shiftChance) {
+                    return 3;
+                }
+            }
         }
         
-        // Штраф применяется только если лидер впереди на 2+ уровня
-        if (gap >= 2 && behaviorRoll <= 2) {
-            // Сдвиг помощи игроку в нейтрал
-            if (Math.random() < shiftChance) {
-                return 3;
+        // Если ходит не лидер - больше помощи ему
+        if (currentPlayerId !== leaderId && levelDiff < 0) {
+            // ИЗМЕНЕНИЕ 3: Три тира helpBoost вместо линейного
+            const absLevelDiff = Math.abs(levelDiff);
+            let helpBoost;
+            if (absLevelDiff <= 2) {
+                helpBoost = 0.10; // Небольшое отставание
+            } else if (absLevelDiff <= 4) {
+                helpBoost = 0.20; // Среднее отставание
+            } else {
+                helpBoost = 0.35; // Критическое отставание
+            }
+            
+            if (behaviorRoll >= 5) {
+                // Сдвиг помощи монстру в нейтрал или помощь игроку
+                if (Math.random() < (0.35 + helpBoost)) {
+                    return Math.random() < 0.5 ? 3 : 1;
+                }
+            }
+            if (behaviorRoll === 3 || behaviorRoll === 4) {
+                // Сдвиг нейтрала в помощь игроку
+                if (Math.random() < (0.25 + helpBoost)) {
+                    return 1;
+                }
             }
         }
     }
     
-    // Если ходит не лидер - больше помощи ему
-    if (currentPlayerId !== leaderId && levelDiff < 0) {
-        // ИЗМЕНЕНИЕ 3: Три тира helpBoost вместо линейного
-        const absLevelDiff = Math.abs(levelDiff);
-        let helpBoost;
-        if (absLevelDiff <= 2) {
-            helpBoost = 0.10; // Небольшое отставание
-        } else if (absLevelDiff <= 4) {
-            helpBoost = 0.20; // Среднее отставание
-        } else {
-            helpBoost = 0.35; // Критическое отставание
-        }
-        
-        if (behaviorRoll >= 5) {
-            // Сдвиг помощи монстру в нейтрал или помощь игроку
-            if (Math.random() < (0.35 + helpBoost)) {
-                return Math.random() < 0.5 ? 3 : 1;
-            }
-        }
-        if (behaviorRoll === 3 || behaviorRoll === 4) {
-            // Сдвиг нейтрала в помощь игроку
-            if (Math.random() < (0.25 + helpBoost)) {
-                return 1;
-            }
-        }
-    }
-    
-    // ИЗМЕНЕНИЕ 2: Применение контекста боя (применяется ВМЕСТЕ с модификаторами уровня)
+    // ИЗМЕНЕНИЕ 2: Применение контекста боя (применяется ВСЕГДА, даже если leaderId === 0)
     let contextModified = behaviorRoll;
     
     // Игрок явно побеждает (combatGap >= 4)
@@ -370,6 +366,13 @@ function resetMatch() {
     for (let i = 1; i <= playerCount; i++) {
         playerLevels[i] = 1;
     }
+    
+    // Удаляем лишних игроков из playerLevels
+    Object.keys(playerLevels).forEach(id => {
+        if (parseInt(id) > playerCount) {
+            delete playerLevels[id];
+        }
+    });
     
     // Реинициализируем ботов
     const botCount = parseInt(document.getElementById('botCount').value);
@@ -629,25 +632,3 @@ document.addEventListener('DOMContentLoaded', function() {
     
     document.getElementById('playerCount').dispatchEvent(new Event('input'));
 });
-
-// Мобильные настройки
-function openMobileSettings() {
-    document.getElementById('mobileSettings').classList.add('open');
-    // Синхронизируем значения
-    document.getElementById('playerCountMobile').value = document.getElementById('playerCount').value;
-}
-
-function closeMobileSettings() {
-    document.getElementById('mobileSettings').classList.remove('open');
-}
-
-function syncPlayerCount() {
-    const mobileCount = document.getElementById('playerCountMobile').value;
-    document.getElementById('playerCount').value = mobileCount;
-    document.getElementById('playerCount').dispatchEvent(new Event('input'));
-}
-
-function syncBotCount() {
-    const mobileCount = document.getElementById('botCountMobile').value;
-    document.getElementById('botCount').value = mobileCount;
-}
